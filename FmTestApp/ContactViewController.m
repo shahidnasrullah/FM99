@@ -13,6 +13,7 @@
 @end
 
 @implementation ContactViewController
+@synthesize imageView;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -26,6 +27,20 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    CGRect screenRect = [[UIScreen mainScreen] applicationFrame];
+    NSLog(@"Height: %f", screenRect.size.height);
+    if (screenRect.size.height > 480)
+    {
+        self.imageView.image = [UIImage imageNamed:@"Contacts-568h@2x.png"];
+        //self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"Default.png"]];
+        NSLog(@"iphone 5");
+    }
+    else
+    {
+        self.imageView.image = [UIImage imageNamed:@"Contacts@2x.png"];
+        NSLog(@"iphone 4");
+        
+    }
     // Do any additional setup after loading the view from its nib.
 }
 
@@ -42,4 +57,8 @@
     }];
 }
 
+- (void)viewDidUnload {
+    [self setImageView:nil];
+    [super viewDidUnload];
+}
 @end

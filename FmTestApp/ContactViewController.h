@@ -10,6 +10,7 @@
 
 @interface ContactViewController : UIViewController
 
+@property (weak, nonatomic) IBOutlet UIImageView *imageView;
 -(IBAction)closeViewController:(id)sender;
 
 @end
