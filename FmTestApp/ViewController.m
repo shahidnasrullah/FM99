@@ -10,6 +10,7 @@
 
 #import "FacebookViewController.h"
 #import "ContactViewController.h"
+#import "Reachability.h"
 #import <MediaPlayer/MediaPlayer.h>
 
 
@@ -23,10 +24,11 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [self addDefaultStreamingURL];
+    //[self addDefaultStreamingURL];
     [self addVolumeView];
     currentTime = [NSNumber numberWithInt:0];
     timeElasped = 0;
+    isFirstPlaying = YES;
     loader = nil;
     [self createAutioPlayer];
     CGRect screenRect = [[UIScreen mainScreen] applicationFrame];
@@ -67,6 +69,13 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (BOOL) isConnected
+{
+    Reachability *reachability = [Reachability reachabilityForInternetConnection];
+    NetworkStatus networkStatus = [reachability currentReachabilityStatus];
+    return !(networkStatus == NotReachable);
 }
 
 -(void)sliderChanged:(id)sender
@@ -120,9 +129,14 @@
         if(loader == nil){
             [self createActivityIndicator];
         }
-        if (timeElasped>30) {
-            
+        if (timeElasped>10) {
             //NSLog(@"URL is invalid Load other url");
+            if(isFirstPlaying)
+            {
+                isFirstPlaying = NO;
+                NSLog(@"Value is changed");
+                [self changeStramingURL];
+            }
         }
         //NSLog(@"Equal");
     }
@@ -178,12 +192,20 @@
 -(void)streamAudio:(id)sender
 {
     if(!isPlaying){
-        isPlaying = YES;
-        [self changeStramingURL];
-        [audioPlayer play];
-        [playButton setImage:[UIImage imageNamed:@"Stop.png"] forState:UIControlStateNormal];
-        [self startBackgroundService];
-        [self startTimer];
+        if([self isConnected])
+        {
+            isPlaying = YES;
+            //[self changeStramingURL];
+            [audioPlayer play];
+            [playButton setImage:[UIImage imageNamed:@"Stop.png"] forState:UIControlStateNormal];
+            [self startBackgroundService];
+            [self startTimer];
+        }
+        else
+        {
+            UIAlertView * errorAlert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"No internet connection found!" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+            [errorAlert show];
+        }
     }
     else
     {
@@ -197,14 +219,19 @@
 
 -(void) changeStramingURL
 {
-    NSUserDefaults * defaults = [NSUserDefaults standardUserDefaults];
+    [audioPlayer pause];
+    AVPlayerItem * newItem = [[AVPlayerItem alloc] initWithURL:[NSURL URLWithString:secondURL]];
+    [audioPlayer replaceCurrentItemWithPlayerItem:newItem];
+    [audioPlayer play];
+    NSLog(@"Second URL: %@", secondURL);
+    /*NSUserDefaults * defaults = [NSUserDefaults standardUserDefaults];
     NSString * newURL = [defaults objectForKey:@"streamURL"];
     if(streamingURL != nil && ![streamingURL isEqualToString:newURL])
     {
         streamingURL = newURL;
         AVPlayerItem * newItem = [[AVPlayerItem alloc] initWithURL:[NSURL URLWithString:streamingURL]];
         [audioPlayer replaceCurrentItemWithPlayerItem:newItem];
-    }
+    }*/
 }
 
 -(void) startBackgroundService
@@ -233,7 +260,7 @@
         NSUserDefaults * defaults = [NSUserDefaults standardUserDefaults];
         streamingURL = [defaults objectForKey:@"streamURL"];
         //NSLog(@"URL: %@", streamingURL);
-        audioPlayer = [[AVPlayer alloc] initWithURL:[NSURL URLWithString:streamingURL]];
+        audioPlayer = [[AVPlayer alloc] initWithURL:[NSURL URLWithString:firstURL]];
         
         [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:nil];
         [[AVAudioSession sharedInstance] setActive: YES error: nil];

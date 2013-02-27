@@ -7,10 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		F850A46F16D4AE9000F05AD7 /* SteamValidator.m in Sources */ = {isa = PBXBuildFile; fileRef = F850A46E16D4AE9000F05AD7 /* SteamValidator.m */; };
 		F850A47816D4D11A00F05AD7 /* Loader.m in Sources */ = {isa = PBXBuildFile; fileRef = F850A47616D4D11A00F05AD7 /* Loader.m */; };
 		F850A47916D4D11A00F05AD7 /* Loader.xib in Resources */ = {isa = PBXBuildFile; fileRef = F850A47716D4D11A00F05AD7 /* Loader.xib */; };
-		F850A47D16D51B3400F05AD7 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = F850A47C16D51B3300F05AD7 /* Settings.bundle */; };
 		F899D32716CA40280058913E /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F899D32616CA40280058913E /* UIKit.framework */; };
 		F899D32B16CA40280058913E /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F899D32A16CA40280058913E /* CoreGraphics.framework */; };
 		F899D33116CA40280058913E /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = F899D32F16CA40280058913E /* InfoPlist.strings */; };
@@ -29,6 +27,9 @@
 		F899D37316CA655A0058913E /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F899D37216CA655A0058913E /* CoreMedia.framework */; };
 		F899D37F16CA6EFC0058913E /* ContactViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F899D37D16CA6EFC0058913E /* ContactViewController.m */; };
 		F899D38016CA6EFC0058913E /* ContactViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F899D37E16CA6EFC0058913E /* ContactViewController.xib */; };
+		F89B6DA216DB417700B88241 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = F89B6D9F16DB417700B88241 /* Reachability.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		F89B6DA316DB417700B88241 /* ReachabilityAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F89B6DA116DB417700B88241 /* ReachabilityAppDelegate.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		F89B6DAE16DB42BC00B88241 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F89B6DAD16DB42BC00B88241 /* SystemConfiguration.framework */; };
 		F89DFDD816D3A08500C6FA04 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F89DFDD716D3A08500C6FA04 /* Default-568h@2x.png */; };
 		F89DFDEF16D3BA6700C6FA04 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F89DFDED16D3BA6700C6FA04 /* ViewController.m */; };
 		F89DFDF016D3BA6700C6FA04 /* ViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F89DFDEE16D3BA6700C6FA04 /* ViewController.xib */; };
@@ -44,12 +45,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		F850A46D16D4AE9000F05AD7 /* SteamValidator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SteamValidator.h; sourceTree = "<group>"; };
-		F850A46E16D4AE9000F05AD7 /* SteamValidator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SteamValidator.m; sourceTree = "<group>"; };
 		F850A47516D4D11A00F05AD7 /* Loader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Loader.h; sourceTree = "<group>"; };
 		F850A47616D4D11A00F05AD7 /* Loader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Loader.m; sourceTree = "<group>"; };
 		F850A47716D4D11A00F05AD7 /* Loader.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Loader.xib; sourceTree = "<group>"; };
-		F850A47C16D51B3300F05AD7 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		F899D32216CA40280058913E /* fmApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = fmApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F899D32616CA40280058913E /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		F899D32816CA40280058913E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -74,6 +72,11 @@
 		F899D37C16CA6EFC0058913E /* ContactViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContactViewController.h; sourceTree = "<group>"; };
 		F899D37D16CA6EFC0058913E /* ContactViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactViewController.m; sourceTree = "<group>"; };
 		F899D37E16CA6EFC0058913E /* ContactViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ContactViewController.xib; sourceTree = "<group>"; };
+		F89B6D9E16DB417700B88241 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
+		F89B6D9F16DB417700B88241 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
+		F89B6DA016DB417700B88241 /* ReachabilityAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReachabilityAppDelegate.h; sourceTree = "<group>"; };
+		F89B6DA116DB417700B88241 /* ReachabilityAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReachabilityAppDelegate.m; sourceTree = "<group>"; };
+		F89B6DAD16DB42BC00B88241 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		F89DFDD716D3A08500C6FA04 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		F89DFDEC16D3BA6700C6FA04 /* ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		F89DFDED16D3BA6700C6FA04 /* ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
@@ -94,6 +97,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F89B6DAE16DB42BC00B88241 /* SystemConfiguration.framework in Frameworks */,
 				F899D37316CA655A0058913E /* CoreMedia.framework in Frameworks */,
 				F899D37116CA64420058913E /* Foundation.framework in Frameworks */,
 				F899D37016CA62530058913E /* CoreFoundation.framework in Frameworks */,
@@ -109,13 +113,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		F850A46C16D4AE7B00F05AD7 /* StramValidator */ = {
+		F850A46C16D4AE7B00F05AD7 /* Reachability */ = {
 			isa = PBXGroup;
 			children = (
-				F850A46D16D4AE9000F05AD7 /* SteamValidator.h */,
-				F850A46E16D4AE9000F05AD7 /* SteamValidator.m */,
+				F89B6D9E16DB417700B88241 /* Reachability.h */,
+				F89B6D9F16DB417700B88241 /* Reachability.m */,
+				F89B6DA016DB417700B88241 /* ReachabilityAppDelegate.h */,
+				F89B6DA116DB417700B88241 /* ReachabilityAppDelegate.m */,
 			);
-			name = StramValidator;
+			name = Reachability;
 			sourceTree = "<group>";
 		};
 		F850A47416D4D10000F05AD7 /* Loader */ = {
@@ -132,7 +138,7 @@
 			isa = PBXGroup;
 			children = (
 				F850A47416D4D10000F05AD7 /* Loader */,
-				F850A46C16D4AE7B00F05AD7 /* StramValidator */,
+				F850A46C16D4AE7B00F05AD7 /* Reachability */,
 				F89DFDEB16D3B9D100C6FA04 /* RootController */,
 				F899D37B16CA6EE10058913E /* ContactLink */,
 				F899D36516CA53B30058913E /* FacebookLink */,
@@ -153,6 +159,7 @@
 		F899D32516CA40280058913E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				F89B6DAD16DB42BC00B88241 /* SystemConfiguration.framework */,
 				F899D37216CA655A0058913E /* CoreMedia.framework */,
 				F899D36F16CA62530058913E /* CoreFoundation.framework */,
 				F899D36D16CA5BB80058913E /* AVFoundation.framework */,
@@ -187,7 +194,6 @@
 				F899D32F16CA40280058913E /* InfoPlist.strings */,
 				F899D33216CA40280058913E /* main.m */,
 				F899D33416CA40280058913E /* FmTestApp-Prefix.pch */,
-				F850A47C16D51B3300F05AD7 /* Settings.bundle */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -306,7 +312,6 @@
 				F89DFE3516D3D57D00C6FA04 /* button.png in Resources */,
 				F89DFE3616D3D57D00C6FA04 /* button@2x.png in Resources */,
 				F850A47916D4D11A00F05AD7 /* Loader.xib in Resources */,
-				F850A47D16D51B3400F05AD7 /* Settings.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -322,8 +327,9 @@
 				F899D36916CA53D50058913E /* FacebookViewController.m in Sources */,
 				F899D37F16CA6EFC0058913E /* ContactViewController.m in Sources */,
 				F89DFDEF16D3BA6700C6FA04 /* ViewController.m in Sources */,
-				F850A46F16D4AE9000F05AD7 /* SteamValidator.m in Sources */,
 				F850A47816D4D11A00F05AD7 /* Loader.m in Sources */,
+				F89B6DA216DB417700B88241 /* Reachability.m in Sources */,
+				F89B6DA316DB417700B88241 /* ReachabilityAppDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -397,10 +403,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer: Sanu Paramsothy (3G246MNRJL)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "FmTestApp/FmTestApp-Prefix.pch";
 				INFOPLIST_FILE = "FmTestApp/FmTestApp-Info.plist";
 				PRODUCT_NAME = fmApp;
+				PROVISIONING_PROFILE = "D1A045BA-3D29-499B-BC87-787FBC53E3A8";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -409,10 +417,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer: Sanu Paramsothy (3G246MNRJL)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "FmTestApp/FmTestApp-Prefix.pch";
 				INFOPLIST_FILE = "FmTestApp/FmTestApp-Info.plist";
 				PRODUCT_NAME = fmApp;
+				PROVISIONING_PROFILE = "D1A045BA-3D29-499B-BC87-787FBC53E3A8";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

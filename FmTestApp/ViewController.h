@@ -11,13 +11,17 @@
 
 #import "Loader.h"
 
+# define firstURL @"http://tamilmurasam.serveftp.com:8000/"
+# define secondURL @"http://stream.radionova.no/fm993.mp3.m3u"
+
 # define kRealURL @"http://tamilmurasam.serveftp.com:8000/"
-# define kRadioStreamURL @"http://tamilmurasam.serveftp.com:8000/"
+# define kRadioStreamURL @"http://stream.radionova.no/fm993.mp3.m3u"
 
 @interface ViewController : UIViewController
 {
 	NSTimer *progressUpdateTimer;
     BOOL isPlaying;
+    BOOL isFirstPlaying;
     AVPlayer * audioPlayer;
     UIBackgroundTaskIdentifier backgroundTask;
     NSTimer * timer;
