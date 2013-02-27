@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F8196A2C16DDF67300FBCCDC /* appicon.png in Resources */ = {isa = PBXBuildFile; fileRef = F8196A2B16DDF67300FBCCDC /* appicon.png */; };
+		F8196A2E16DDF67A00FBCCDC /* appicon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F8196A2D16DDF67A00FBCCDC /* appicon@2x.png */; };
 		F850A47816D4D11A00F05AD7 /* Loader.m in Sources */ = {isa = PBXBuildFile; fileRef = F850A47616D4D11A00F05AD7 /* Loader.m */; };
 		F850A47916D4D11A00F05AD7 /* Loader.xib in Resources */ = {isa = PBXBuildFile; fileRef = F850A47716D4D11A00F05AD7 /* Loader.xib */; };
 		F899D32716CA40280058913E /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F899D32616CA40280058913E /* UIKit.framework */; };
@@ -45,6 +47,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		F8196A2B16DDF67300FBCCDC /* appicon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = appicon.png; sourceTree = "<group>"; };
+		F8196A2D16DDF67A00FBCCDC /* appicon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "appicon@2x.png"; sourceTree = "<group>"; };
 		F850A47516D4D11A00F05AD7 /* Loader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Loader.h; sourceTree = "<group>"; };
 		F850A47616D4D11A00F05AD7 /* Loader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Loader.m; sourceTree = "<group>"; };
 		F850A47716D4D11A00F05AD7 /* Loader.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Loader.xib; sourceTree = "<group>"; };
@@ -137,6 +141,8 @@
 		F899D31716CA40280058913E = {
 			isa = PBXGroup;
 			children = (
+				F8196A2D16DDF67A00FBCCDC /* appicon@2x.png */,
+				F8196A2B16DDF67300FBCCDC /* appicon.png */,
 				F850A47416D4D10000F05AD7 /* Loader */,
 				F850A46C16D4AE7B00F05AD7 /* Reachability */,
 				F89DFDEB16D3B9D100C6FA04 /* RootController */,
@@ -312,6 +318,8 @@
 				F89DFE3516D3D57D00C6FA04 /* button.png in Resources */,
 				F89DFE3616D3D57D00C6FA04 /* button@2x.png in Resources */,
 				F850A47916D4D11A00F05AD7 /* Loader.xib in Resources */,
+				F8196A2C16DDF67300FBCCDC /* appicon.png in Resources */,
+				F8196A2E16DDF67A00FBCCDC /* appicon@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
