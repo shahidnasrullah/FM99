@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		88A2D73217704DE50058E52E /* OptionsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 88A2D73017704DE50058E52E /* OptionsViewController.m */; };
+		88A2D73317704DE50058E52E /* OptionsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 88A2D73117704DE50058E52E /* OptionsViewController.xib */; };
+		88A2D73817707AB70058E52E /* RecordedTracksViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 88A2D73617707AB60058E52E /* RecordedTracksViewController.m */; };
+		88A2D73917707AB70058E52E /* RecordedTracksViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 88A2D73717707AB70058E52E /* RecordedTracksViewController.xib */; };
+		88A2D73D177080380058E52E /* PlayRecordingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 88A2D73B177080370058E52E /* PlayRecordingViewController.m */; };
+		88A2D73E177080380058E52E /* PlayRecordingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 88A2D73C177080380058E52E /* PlayRecordingViewController.xib */; };
 		F8196A3916DE1ECD00FBCCDC /* appicon.png in Resources */ = {isa = PBXBuildFile; fileRef = F8196A3816DE1ECD00FBCCDC /* appicon.png */; };
 		F8196A3B16DE1ED400FBCCDC /* appicon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F8196A3A16DE1ED400FBCCDC /* appicon@2x.png */; };
 		F850A47816D4D11A00F05AD7 /* Loader.m in Sources */ = {isa = PBXBuildFile; fileRef = F850A47616D4D11A00F05AD7 /* Loader.m */; };
@@ -47,6 +53,15 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		88A2D72F17704DE50058E52E /* OptionsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OptionsViewController.h; sourceTree = "<group>"; };
+		88A2D73017704DE50058E52E /* OptionsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OptionsViewController.m; sourceTree = "<group>"; };
+		88A2D73117704DE50058E52E /* OptionsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OptionsViewController.xib; sourceTree = "<group>"; };
+		88A2D73517707AB60058E52E /* RecordedTracksViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RecordedTracksViewController.h; sourceTree = "<group>"; };
+		88A2D73617707AB60058E52E /* RecordedTracksViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecordedTracksViewController.m; sourceTree = "<group>"; };
+		88A2D73717707AB70058E52E /* RecordedTracksViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RecordedTracksViewController.xib; sourceTree = "<group>"; };
+		88A2D73A177080370058E52E /* PlayRecordingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayRecordingViewController.h; sourceTree = "<group>"; };
+		88A2D73B177080370058E52E /* PlayRecordingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlayRecordingViewController.m; sourceTree = "<group>"; };
+		88A2D73C177080380058E52E /* PlayRecordingViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PlayRecordingViewController.xib; sourceTree = "<group>"; };
 		F8196A3816DE1ECD00FBCCDC /* appicon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = appicon.png; path = ../appicon.png; sourceTree = "<group>"; };
 		F8196A3A16DE1ED400FBCCDC /* appicon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "appicon@2x.png"; path = "../appicon@2x.png"; sourceTree = "<group>"; };
 		F850A47516D4D11A00F05AD7 /* Loader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Loader.h; sourceTree = "<group>"; };
@@ -117,6 +132,27 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		88AD5937176EFEC800E95A9F /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				F850A47416D4D10000F05AD7 /* Loader */,
+				F850A46C16D4AE7B00F05AD7 /* Reachability */,
+				F89DFDEB16D3B9D100C6FA04 /* RootController */,
+				F899D37B16CA6EE10058913E /* ContactLink */,
+				F899D36516CA53B30058913E /* FacebookLink */,
+				88A2D72F17704DE50058E52E /* OptionsViewController.h */,
+				88A2D73017704DE50058E52E /* OptionsViewController.m */,
+				88A2D73117704DE50058E52E /* OptionsViewController.xib */,
+				88A2D73517707AB60058E52E /* RecordedTracksViewController.h */,
+				88A2D73617707AB60058E52E /* RecordedTracksViewController.m */,
+				88A2D73717707AB70058E52E /* RecordedTracksViewController.xib */,
+				88A2D73A177080370058E52E /* PlayRecordingViewController.h */,
+				88A2D73B177080370058E52E /* PlayRecordingViewController.m */,
+				88A2D73C177080380058E52E /* PlayRecordingViewController.xib */,
+			);
+			name = Source;
+			sourceTree = "<group>";
+		};
 		F850A46C16D4AE7B00F05AD7 /* Reachability */ = {
 			isa = PBXGroup;
 			children = (
@@ -141,11 +177,7 @@
 		F899D31716CA40280058913E = {
 			isa = PBXGroup;
 			children = (
-				F850A47416D4D10000F05AD7 /* Loader */,
-				F850A46C16D4AE7B00F05AD7 /* Reachability */,
-				F89DFDEB16D3B9D100C6FA04 /* RootController */,
-				F899D37B16CA6EE10058913E /* ContactLink */,
-				F899D36516CA53B30058913E /* FacebookLink */,
+				88AD5937176EFEC800E95A9F /* Source */,
 				F899D32C16CA40280058913E /* FmTestApp */,
 				F899D32516CA40280058913E /* Frameworks */,
 				F899D32316CA40280058913E /* Products */,
@@ -320,6 +352,9 @@
 				F8BC742B16DF502500C6A75A /* Contacts-568h@2x.png in Resources */,
 				F8BC742C16DF502500C6A75A /* Contacts.png in Resources */,
 				F8BC742D16DF502500C6A75A /* Contacts@2x.png in Resources */,
+				88A2D73317704DE50058E52E /* OptionsViewController.xib in Resources */,
+				88A2D73917707AB70058E52E /* RecordedTracksViewController.xib in Resources */,
+				88A2D73E177080380058E52E /* PlayRecordingViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -338,6 +373,9 @@
 				F850A47816D4D11A00F05AD7 /* Loader.m in Sources */,
 				F89B6DA216DB417700B88241 /* Reachability.m in Sources */,
 				F89B6DA316DB417700B88241 /* ReachabilityAppDelegate.m in Sources */,
+				88A2D73217704DE50058E52E /* OptionsViewController.m in Sources */,
+				88A2D73817707AB70058E52E /* RecordedTracksViewController.m in Sources */,
+				88A2D73D177080380058E52E /* PlayRecordingViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

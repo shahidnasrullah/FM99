@@ -18,4 +18,6 @@
 
 @property (strong, nonatomic) ViewController *viewController;
 
+-(NSString*) getDocumentPath;
+-(void) showAlert:(NSString*) title withMessage:(NSString*)msg;
 @end

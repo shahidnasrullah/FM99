@@ -27,6 +27,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.title = @"Contact Us";
     CGRect screenRect = [[UIScreen mainScreen] applicationFrame];
     NSLog(@"Height: %f", screenRect.size.height);
     if (screenRect.size.height > 480)

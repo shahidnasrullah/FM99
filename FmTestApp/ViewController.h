@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import <AVFoundation/AVFoundation.h>
+#import "AppDelegate.h"
 
 #import "Loader.h"
 
@@ -17,11 +18,12 @@
 # define kRealURL @"http://tamilmurasam.serveftp.com:8000/"
 # define kRadioStreamURL @"http://stream.radionova.no/fm993.mp3.m3u"
 
-@interface ViewController : UIViewController
+@interface ViewController : UIViewController<NSURLConnectionDelegate, UIAlertViewDelegate>
 {
 	NSTimer *progressUpdateTimer;
     BOOL isPlaying;
     BOOL isFirstPlaying;
+    BOOL isRecoding;
     AVPlayer * audioPlayer;
     UIBackgroundTaskIdentifier backgroundTask;
     NSTimer * timer;
@@ -29,7 +31,12 @@
     int timeElasped;
     Loader * loader;
     NSString * streamingURL;
+    NSMutableData * streamData;
+    UITextField *myTextField;
+    NSURLConnection * conn;
+    AppDelegate * app;
 }
+- (IBAction)startRecording:(id)sender;
 @property (weak, nonatomic) IBOutlet UIView *tempView;
 @property (weak, nonatomic) IBOutlet UISlider *voluemView;
 @property (weak, nonatomic) IBOutlet UIImageView *imageView;

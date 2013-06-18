@@ -10,8 +10,10 @@
 
 #import "FacebookViewController.h"
 #import "ContactViewController.h"
+#import "OptionsViewController.h"
 #import "Reachability.h"
 #import <MediaPlayer/MediaPlayer.h>
+#import <AudioToolbox/AudioToolbox.h>
 
 
 @interface ViewController ()
@@ -21,10 +23,14 @@
 @implementation ViewController
 @synthesize playButton, imageView;
 
+
+#pragma mark - Life Cycle Events
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     //[self addDefaultStreamingURL];
+    app = (AppDelegate*)[UIApplication sharedApplication].delegate;
     [self addVolumeView];
     currentTime = [NSNumber numberWithInt:0];
     timeElasped = 0;
@@ -45,6 +51,85 @@
         [playButton setFrame:CGRectMake(playButton.frame.origin.x + 4, playButton.frame.origin.y, playButton.frame.size.width - 8, playButton.frame.size.height)];
     }
 }
+
+- (void)viewDidUnload {
+    [self setVoluemView:nil];
+    [self setTempView:nil];
+    [super viewDidUnload];
+}
+
+#pragma mark - IBAction Events
+
+- (IBAction)startRecording:(id)sender {
+    if (isRecoding) {
+        [conn cancel];
+        [self showSaveFileDialog:@"Save file with name"];
+    }
+    else
+    {
+        NSURL * url = [NSURL URLWithString:@"http://stream.radionova.no:80/fm993.mp3"];
+        NSURLRequest * request = [[NSURLRequest alloc] initWithURL:url];
+        conn = [[NSURLConnection alloc] initWithRequest:request delegate:self];
+        if(conn)
+        {
+            streamData = [[NSMutableData alloc] init];
+        }
+    }
+    
+    isRecoding = !isRecoding;
+}
+
+-(IBAction)streamAudio:(id)sender
+{
+    if(!isPlaying){
+        if([self isConnected])
+        {
+            isPlaying = YES;
+            //[self changeStramingURL];
+            [audioPlayer play];
+            [playButton setImage:[UIImage imageNamed:@"Stop.png"] forState:UIControlStateNormal];
+            [self startBackgroundService];
+            [self startTimer];
+        }
+        else
+        {
+            UIAlertView * errorAlert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"No internet connection found!" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+            [errorAlert show];
+        }
+    }
+    else
+    {
+        [audioPlayer pause];
+        isPlaying = NO;
+        [playButton setImage:[UIImage imageNamed:@"Play.png"] forState:UIControlStateNormal];
+        [self endBackgroundService];
+        [self stopTimer];
+    }
+}
+
+-(IBAction)openFacebookLink:(id)sender
+{
+    FacebookViewController * fbController = [[FacebookViewController alloc] initWithNibName:@"FacebookViewController" bundle:nil];
+    UINavigationController * navController = [[UINavigationController alloc] initWithRootViewController:fbController];
+    [self presentViewController:navController animated:YES completion:^{
+    }];
+}
+
+-(IBAction)openContectLink:(id)sender
+{
+    OptionsViewController * optController = [[OptionsViewController alloc] init];
+    UINavigationController * navController = [[UINavigationController alloc] initWithRootViewController:optController];
+    [self presentViewController:navController animated:YES completion:^{
+        
+    }];
+    
+    /*
+    ContactViewController * contactController = [[ContactViewController alloc] initWithNibName:@"ContactViewController" bundle:nil];
+    [self presentViewController:contactController animated:YES completion:^{
+    }];*/
+}
+
+#pragma mark - Player Events
 
 -(void) addDefaultStreamingURL
 {
@@ -189,33 +274,7 @@
     }
 }
 
--(void)streamAudio:(id)sender
-{
-    if(!isPlaying){
-        if([self isConnected])
-        {
-            isPlaying = YES;
-            //[self changeStramingURL];
-            [audioPlayer play];
-            [playButton setImage:[UIImage imageNamed:@"Stop.png"] forState:UIControlStateNormal];
-            [self startBackgroundService];
-            [self startTimer];
-        }
-        else
-        {
-            UIAlertView * errorAlert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"No internet connection found!" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-            [errorAlert show];
-        }
-    }
-    else
-    {
-        [audioPlayer pause];
-        isPlaying = NO;
-        [playButton setImage:[UIImage imageNamed:@"Play.png"] forState:UIControlStateNormal];
-        [self endBackgroundService];
-        [self stopTimer];
-    }
-}
+
 
 -(void) changeStramingURL
 {
@@ -268,25 +327,117 @@
     }
 }
 
--(void)openFacebookLink:(id)sender
+
+-(void) showSaveFileDialog:(NSString*) msg
 {
-    FacebookViewController * fbController = [[FacebookViewController alloc] initWithNibName:@"FacebookViewController" bundle:nil];
-    UINavigationController * navController = [[UINavigationController alloc] initWithRootViewController:fbController];
-    [self presentViewController:navController animated:YES completion:^{
-    }];
+    UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Save File" message:[NSString stringWithFormat:@"%@\n\n\n",msg] delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
+    myTextField = [[UITextField alloc] initWithFrame:CGRectMake(12.0, 80.0, 260.0, 25.0)];
+    [myTextField setPlaceholder:@"Enter File Name"];
+    [myTextField setBackgroundColor:[UIColor whiteColor]];
+    [alert addSubview:myTextField];
+    [alert show];
 }
 
--(void)openContectLink:(id)sender
+-(void) deleteTempFile
 {
-    ContactViewController * contactController = [[ContactViewController alloc] initWithNibName:@"ContactViewController" bundle:nil];
-    [self presentViewController:contactController animated:YES completion:^{
-    }];
+    NSString * path = [app getDocumentPath];
+    NSString * filePath = [path stringByAppendingPathComponent:@"temp.mp3"];
+    NSFileManager * fm = [NSFileManager defaultManager];
+    if([fm fileExistsAtPath:filePath])
+    {
+        NSError * error;
+        [fm removeItemAtPath:filePath error:&error];
+        if(error)
+        {
+            NSLog(@"File cannot be deleted");
+        }
+    }
 }
 
-- (void)viewDidUnload {
-    [self setVoluemView:nil];
-    [self setTempView:nil];
-    [super viewDidUnload];
+-(void) saveFileWithName:(NSString *) fileName
+{
+    NSString * path = [app getDocumentPath];
+    NSString * filePath = [path stringByAppendingPathComponent:@"temp.mp3"];
+    NSFileManager * fm = [NSFileManager defaultManager];
+    if([fm fileExistsAtPath:filePath])
+    {
+        NSString * newFilePath = [path stringByAppendingPathComponent:fileName];
+        newFilePath = [newFilePath stringByAppendingString:@".mp3"];
+        NSError * error;
+        if([fm fileExistsAtPath:newFilePath])
+        {
+            [self showSaveFileDialog:@"File already exist with this name"];
+        }
+        else
+        {
+            if ([fm moveItemAtPath:filePath toPath:newFilePath error:&error] != YES)
+            {
+                [app showAlert:@"Error!" withMessage:[error localizedDescription]];
+                [self deleteTempFile];
+            }
+            else
+            {
+                [app showAlert:@"Success!" withMessage:@"File Saved Successfully!"];
+                [self deleteTempFile];
+            }
+        }
+    }
 }
+
+
+/*
+-(NSString*) getDocumentPath
+{
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+    
+    return documentsDirectory;
+}
+*/
+#pragma mark - NSURLConnectionDelegate
+
+-(void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
+{
+    NSLog(@"Error: %@", error.userInfo);
+}
+
+- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
+{
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSString * path = [app getDocumentPath];
+    path = [path stringByAppendingPathComponent:@"temp.mp3"];
+    if(![fileManager fileExistsAtPath:path])
+    {
+        [fileManager createFileAtPath:path contents:nil attributes:nil];
+    }
+    NSFileHandle *myHandle = [NSFileHandle fileHandleForWritingAtPath:path];
+    [myHandle seekToEndOfFile];
+    [myHandle writeData:data];
+    [myHandle closeFile];
+}
+
+- (void)connectionDidFinishLoading:(NSURLConnection *)connection
+{
+    NSLog(@"Finished Loading");
+}
+#pragma  mark - UIalertViewDelegate
+-(void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
+{
+    if(buttonIndex == 0)
+    {
+        [self saveFileWithName:[NSString stringWithFormat:@"FM99_%@",[NSDate date]]];
+    }
+    else if (buttonIndex == 1)
+    {
+        if(myTextField.text == @"")
+        {
+            [app showAlert:@"Error" withMessage:@"Please provide any name to save file"];
+        }
+        else{
+            [self saveFileWithName:myTextField.text];
+        }
+    }
+}
+
 
 @end
