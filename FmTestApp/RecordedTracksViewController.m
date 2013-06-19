@@ -60,8 +60,6 @@
     for (int count = 0; count < (int)[directoryContent count]; count++)
     {
         NSString * fileName = [directoryContent objectAtIndex:count];
-        NSLog(@"Path Extension: %@", [fileName pathExtension]);
-        NSLog(@"File %d: %@", (count + 1), [directoryContent objectAtIndex:count]);
         if([[fileName pathExtension] isEqualToString:@"mp3"])
         {
             [dataArray addObject:[directoryContent objectAtIndex:count]];
@@ -127,7 +125,7 @@
 
 -(void)tableView:(UITableView *)tableView didEndEditingRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSLog(@"Editing Ended");
+    
 }
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath

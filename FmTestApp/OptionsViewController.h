@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "FacebookManager.h"
 
 typedef enum {
     ROW_TYPE_RECORDING,
@@ -16,9 +17,10 @@ typedef enum {
     
 } ROW_TYPE;
 
-@interface OptionsViewController : UIViewController<UITableViewDataSource, UITableViewDelegate>
+@interface OptionsViewController : UIViewController<UITableViewDataSource, UITableViewDelegate, FacebookManagerDelegate>
 {
     NSMutableArray * dataArray;
+    FacebookManager *fbManager;
 }
 @property (weak, nonatomic) IBOutlet UITableView *mTableView;
 

@@ -12,6 +12,7 @@
 #import "ContactViewController.h"
 #import "OptionsViewController.h"
 #import "Reachability.h"
+#import "MBProgressHUD.h"
 #import <MediaPlayer/MediaPlayer.h>
 #import <AudioToolbox/AudioToolbox.h>
 
@@ -29,7 +30,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    //[self addDefaultStreamingURL];
     app = (AppDelegate*)[UIApplication sharedApplication].delegate;
     [self addVolumeView];
     currentTime = [NSNumber numberWithInt:0];
@@ -50,11 +50,13 @@
         self.imageView.image = [UIImage imageNamed:@"Default@2x.png"];
         [playButton setFrame:CGRectMake(playButton.frame.origin.x + 4, playButton.frame.origin.y, playButton.frame.size.width - 8, playButton.frame.size.height)];
     }
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notificationDidRecived:) name:kSTOP_PLAYING object:nil];
 }
 
 - (void)viewDidUnload {
     [self setVoluemView:nil];
     [self setTempView:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
     [super viewDidUnload];
 }
 
@@ -67,7 +69,7 @@
     }
     else
     {
-        NSURL * url = [NSURL URLWithString:@"http://stream.radionova.no:80/fm993.mp3"];
+        NSURL * url = [NSURL URLWithString:currentPlayingURL];
         NSURLRequest * request = [[NSURLRequest alloc] initWithURL:url];
         conn = [[NSURLConnection alloc] initWithRequest:request delegate:self];
         if(conn)
@@ -84,12 +86,7 @@
     if(!isPlaying){
         if([self isConnected])
         {
-            isPlaying = YES;
-            //[self changeStramingURL];
-            [audioPlayer play];
-            [playButton setImage:[UIImage imageNamed:@"Stop.png"] forState:UIControlStateNormal];
-            [self startBackgroundService];
-            [self startTimer];
+            [self startPlaying];
         }
         else
         {
@@ -99,11 +96,7 @@
     }
     else
     {
-        [audioPlayer pause];
-        isPlaying = NO;
-        [playButton setImage:[UIImage imageNamed:@"Play.png"] forState:UIControlStateNormal];
-        [self endBackgroundService];
-        [self stopTimer];
+        [self stopPlaying];
     }
 }
 
@@ -122,14 +115,27 @@
     [self presentViewController:navController animated:YES completion:^{
         
     }];
-    
-    /*
-    ContactViewController * contactController = [[ContactViewController alloc] initWithNibName:@"ContactViewController" bundle:nil];
-    [self presentViewController:contactController animated:YES completion:^{
-    }];*/
 }
 
 #pragma mark - Player Events
+
+-(void) stopPlaying
+{
+    [audioPlayer pause];
+    isPlaying = NO;
+    [playButton setImage:[UIImage imageNamed:@"Play.png"] forState:UIControlStateNormal];
+    [self endBackgroundService];
+    [self stopTimer];
+}
+
+-(void) startPlaying
+{
+    isPlaying = YES;
+    [audioPlayer play];
+    [playButton setImage:[UIImage imageNamed:@"Stop.png"] forState:UIControlStateNormal];
+    [self startBackgroundService];
+    [self startTimer];
+}
 
 -(void) addDefaultStreamingURL
 {
@@ -137,7 +143,7 @@
     NSString * url_stream = [defaults objectForKey:@"streamURL"];
     if(url_stream == nil)
     {
-        [defaults setObject:kRadioStreamURL forKey:@"streamURL"];
+        //[defaults setObject:kRadioStreamURL forKey:@"streamURL"];
     }
 }
 
@@ -231,47 +237,26 @@
         currentTime = playbackTime;
         [self removeActivityIndicator];
     }
+    
     //NSLog(@"Time Elapsed: %d", timeElasped);
     //NSLog(@"Playback time: %lld", [audioPlayer currentTime].value/[audioPlayer currentTime].timescale);
 }
 
 -(void) createActivityIndicator
 {
-    NSArray * nibsArray = [[NSBundle mainBundle] loadNibNamed:@"Loader" owner:nil options:nil];
-    loader = [nibsArray objectAtIndex:0];
-    [loader autoPosition:self.view.frame];
-    [loader startAnimating];
-    [self.view addSubview:loader];
+//    NSArray * nibsArray = [[NSBundle mainBundle] loadNibNamed:@"Loader" owner:nil options:nil];
+//    loader = [nibsArray objectAtIndex:0];
+//    [loader autoPosition:self.view.frame];
+//    [loader startAnimating];
+//    [self.view addSubview:loader];
+    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
 }
 
 -(void) removeActivityIndicator
 {
-    [loader removeFromSuperview];
-    loader = nil;
-}
-
--(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
-{
-    if([keyPath isEqualToString:@"status"])
-    {
-        NSLog(@"Observer Called");
-        if([audioPlayer status] == AVPlayerStatusFailed)
-        {
-            NSLog(@"Status Failed");
-        }
-        else if ([audioPlayer status] == AVPlayerStatusReadyToPlay)
-        {
-            NSLog(@"Ready to Play");
-        }
-        else if([audioPlayer status] == AVPlayerStatusUnknown)
-        {
-            NSLog(@"Unknow status");
-        }
-    }
-    else
-    {
-        NSLog(@"Observer path is invalid");
-    }
+    //[loader removeFromSuperview];
+    //loader = nil;
+    [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
 }
 
 
@@ -279,7 +264,8 @@
 -(void) changeStramingURL
 {
     [audioPlayer pause];
-    AVPlayerItem * newItem = [[AVPlayerItem alloc] initWithURL:[NSURL URLWithString:secondURL]];
+    AVPlayerItem * newItem = [self createPlayerItemWithURL:[NSURL URLWithString:secondURL]];
+    currentItem = newItem;
     [audioPlayer replaceCurrentItemWithPlayerItem:newItem];
     [audioPlayer play];
     NSLog(@"Second URL: %@", secondURL);
@@ -319,12 +305,32 @@
         NSUserDefaults * defaults = [NSUserDefaults standardUserDefaults];
         streamingURL = [defaults objectForKey:@"streamURL"];
         //NSLog(@"URL: %@", streamingURL);
-        audioPlayer = [[AVPlayer alloc] initWithURL:[NSURL URLWithString:firstURL]];
+        AVPlayerItem * playerItem = [self createPlayerItemWithURL:[NSURL URLWithString:firstURL]];
+        audioPlayer = [[AVPlayer alloc] initWithPlayerItem:playerItem];
         
         [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:nil];
         [[AVAudioSession sharedInstance] setActive: YES error: nil];
         [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
     }
+}
+
+-(AVPlayerItem*) createPlayerItemWithURL:(NSURL *)url
+{
+    if([url.absoluteString isEqualToString:firstURL])
+    {
+        currentPlayingURL = kfirstRecordingURL;
+    }
+    else
+    {
+        currentPlayingURL = kSecondRecordingURL;
+    }
+    AVPlayerItem * playerItem = [[AVPlayerItem alloc] initWithURL:url];
+    [playerItem addObserver:self forKeyPath:@"timedMetadata" options:NSKeyValueObservingOptionNew context:nil];
+    NSArray *metadataList = [playerItem.asset commonMetadata];
+    for (AVMetadataItem *metaItem in metadataList) {
+        NSLog(@"%@",[metaItem commonKey]);
+    }
+    return playerItem;
 }
 
 
@@ -384,16 +390,37 @@
     }
 }
 
-
-/*
--(NSString*) getDocumentPath
+#pragma mark - AVPlayer Observer Event
+-(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask, YES);
-    NSString *documentsDirectory = [paths objectAtIndex:0];
-    
-    return documentsDirectory;
+    if([keyPath isEqualToString:@"status"])
+    {
+        NSLog(@"Observer Called");
+        if([audioPlayer status] == AVPlayerStatusFailed)
+        {
+            NSLog(@"Status Failed");
+        }
+        else if ([audioPlayer status] == AVPlayerStatusReadyToPlay)
+        {
+            NSLog(@"Ready to Play");
+        }
+        else if([audioPlayer status] == AVPlayerStatusUnknown)
+        {
+            NSLog(@"Unknow status");
+        }
+    }
+    else if ([keyPath isEqualToString:@"timedMetadata"])
+    {
+        AVPlayerItem* playerItem = object;
+        for (AVMetadataItem* metadata in playerItem.timedMetadata)
+        {
+            NSLog(@"\nkey: %@\nkeySpace: %@\ncommonKey: %@\nvalue: %@", [metadata.key description], metadata.keySpace, metadata.commonKey, metadata.stringValue);
+            [[NSUserDefaults standardUserDefaults] setValue:metadata.stringValue forKey:kItemTitle];
+            [[NSUserDefaults standardUserDefaults] synchronize];
+        }
+    }
 }
-*/
+
 #pragma mark - NSURLConnectionDelegate
 
 -(void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
@@ -403,6 +430,7 @@
 
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
 {
+    NSLog(@"Data Recieved");
     NSFileManager *fileManager = [NSFileManager defaultManager];
     NSString * path = [app getDocumentPath];
     path = [path stringByAppendingPathComponent:@"temp.mp3"];
@@ -439,5 +467,12 @@
     }
 }
 
+-(void) notificationDidRecived:(NSNotification*) notification
+{
+    if(isPlaying)
+    {
+        [self stopPlaying];
+    }
+}
 
 @end

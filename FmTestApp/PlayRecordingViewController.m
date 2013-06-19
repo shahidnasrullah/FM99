@@ -59,6 +59,7 @@
     else
     {
         [audioFile play];
+        [[NSNotificationCenter defaultCenter] postNotificationName:kSTOP_PLAYING object:nil];
         [btn setTitle:@"Stop" forState:UIControlStateNormal];
         timer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(timerTick) userInfo:nil repeats:YES];
     }

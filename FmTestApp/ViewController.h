@@ -12,11 +12,11 @@
 
 #import "Loader.h"
 
-# define firstURL @"http://tamilmurasam.serveftp.com:8000/"
+# define firstURL @"http://tamilmurasam.serveftp.com:8000/uip"
 # define secondURL @"http://stream.radionova.no/fm993.mp3.m3u"
 
-# define kRealURL @"http://tamilmurasam.serveftp.com:8000/"
-# define kRadioStreamURL @"http://stream.radionova.no/fm993.mp3.m3u"
+# define kfirstRecordingURL @"http://tamilmurasam.serveftp.com:8000/"
+# define kSecondRecordingURL @"http://stream.radionova.no/fm993.mp3"
 
 @interface ViewController : UIViewController<NSURLConnectionDelegate, UIAlertViewDelegate>
 {
@@ -35,6 +35,8 @@
     UITextField *myTextField;
     NSURLConnection * conn;
     AppDelegate * app;
+    AVPlayerItem * currentItem;
+    NSString * currentPlayingURL;
 }
 - (IBAction)startRecording:(id)sender;
 @property (weak, nonatomic) IBOutlet UIView *tempView;
