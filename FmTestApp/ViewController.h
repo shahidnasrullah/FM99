@@ -12,7 +12,7 @@
 
 #import "Loader.h"
 
-# define firstURL @"http://tamilmurasam.serveftp.com:8000/uip"
+# define firstURL @"http://tamilmurasam.serveftp.com:8000/"
 # define secondURL @"http://stream.radionova.no/fm993.mp3.m3u"
 
 # define kfirstRecordingURL @"http://tamilmurasam.serveftp.com:8000/"
@@ -38,11 +38,13 @@
     AVPlayerItem * currentItem;
     NSString * currentPlayingURL;
 }
+@property (weak, nonatomic) IBOutlet UILabel *lblRecording;
 - (IBAction)startRecording:(id)sender;
 @property (weak, nonatomic) IBOutlet UIView *tempView;
 @property (weak, nonatomic) IBOutlet UISlider *voluemView;
 @property (weak, nonatomic) IBOutlet UIImageView *imageView;
 @property (nonatomic, strong) IBOutlet UIButton * playButton;
+@property (weak, nonatomic) IBOutlet UIButton *recordButton;
 
 -(IBAction)streamAudio:(id)sender;
 -(IBAction)sliderChanged:(id)sender;

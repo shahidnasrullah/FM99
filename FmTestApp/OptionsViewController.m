@@ -11,7 +11,7 @@
 #import "RecordedTracksViewController.h"
 #import "MBProgressHUD.h"
 #import <Accounts/Accounts.h>
-#import <Twitter/Twitter.h>
+#import <Social/Social.h>
 
 @interface OptionsViewController ()
 
@@ -97,23 +97,26 @@
             break;
         case ROW_TYPE_FACEBOOK:
         {
-            if([fbManager isLoggedIn])
-            {
-                [fbManager publishStream:[NSString stringWithFormat:@"Listening %@ on FM99,3",[[NSUserDefaults standardUserDefaults] valueForKey:kItemTitle]]];
-                [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+            if ([SLComposeViewController isAvailableForServiceType:SLServiceTypeFacebook]) {
+                
+                SLComposeViewController * tweetController = [SLComposeViewController composeViewControllerForServiceType:SLServiceTypeFacebook];
+                [tweetController setInitialText:[NSString stringWithFormat:@"Listening %@ on FM99,3",[[NSUserDefaults standardUserDefaults] valueForKey:kItemTitle]]];
+                [self presentViewController:tweetController animated:YES completion:nil];
             }
-            else
-            {
-                [fbManager loginFacebook];
+            else {
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Tamilmurasam"
+                                                                message:@"No accounts configured! First Configure Facebook via iOS Settings"
+                                                               delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+                [alert show];
             }
         }
             break;
         case ROW_TYPE_TWITTER:
         {
-            if ([TWTweetComposeViewController canSendTweet]) {
+            if ([SLComposeViewController isAvailableForServiceType:SLServiceTypeTwitter]) {
                 
-                TWTweetComposeViewController * tweetController = [[TWTweetComposeViewController alloc] init];
-                [tweetController setInitialText:[NSString stringWithFormat:@"Listening %@",[[NSUserDefaults standardUserDefaults] valueForKey:kItemTitle]]];
+                SLComposeViewController * tweetController = [SLComposeViewController composeViewControllerForServiceType:SLServiceTypeTwitter];
+                [tweetController setInitialText:[NSString stringWithFormat:@"Listening %@ on FM99,3",[[NSUserDefaults standardUserDefaults] valueForKey:kItemTitle]]];
                 [self presentViewController:tweetController animated:YES completion:nil];
             }
             else {
@@ -134,70 +137,5 @@
             break;
     }
 }
-
-- (void)manager:(FacebookManager*)manager facebookDidLogin:(BOOL)status
-{
-    if (status) {
-        [fbManager publishStream:[NSString stringWithFormat:@"Listening %@ on FM99,3",[[NSUserDefaults standardUserDefaults] valueForKey:kItemTitle]]];
-        [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    }
-}
-
-- (void)manager:(FacebookManager*)manager facebookDidLogout:(BOOL)status
-{
-    
-}
-
-- (void)manager:(FacebookManager*)manager facebookDidUpdate:(BOOL)status
-{
-    [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-    if (status) {
-        NSLog(@"SUCCEEDED");
-    }
-    else
-        NSLog(@"FAILED");
-}
-
-- (void)manager:(FacebookManager*)manager dialodLoadingDidFailWithError:(NSError*)error
-{
-    NSLog(@"Recieved Error %@",[error description]);
-    [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-}
-
-- (void)manager:(FacebookManager*)manager dialogDidSucceed:(BOOL)status
-{
-    if (status) {
-        NSLog(@"SUCCEEDED");
-    }
-    else
-        NSLog(@"FAILED");
-    [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-}
-
-- (void)manager:(FacebookManager*)manager dialogWillSucceed:(BOOL)status withURL:(NSURL*)url
-{
-    if (status) {
-        NSLog(@"Success with %@",url);
-    }
-    else
-        NSLog(@"FAILED");
-    [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-}
-
-- (void)manager:(FacebookManager*)manager facebookDidReceivedError:(NSError*)error
-{
-    NSLog(@"Recieved Error %@",[error description]);
-    if ([[[[error userInfo] valueForKey:@"error"] valueForKey:@"code"] integerValue] == 190) {
-        [fbManager loginFacebook];
-    }
-    else {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Tamilmurasam" message:@"Error Occurred while sharing!"
-                                                       delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-        [alert setCancelButtonIndex:0];
-        [alert show];
-    }
-    [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-}
-
 
 @end

@@ -49,6 +49,7 @@
         // IPHONE_4 SPECIFIC
         self.imageView.image = [UIImage imageNamed:@"Default@2x.png"];
         [playButton setFrame:CGRectMake(playButton.frame.origin.x + 4, playButton.frame.origin.y, playButton.frame.size.width - 8, playButton.frame.size.height)];
+        [self.recordButton setFrame:CGRectMake(self.recordButton.frame.origin.x + 4, self.recordButton.frame.origin.y, self.recordButton.frame.size.width - 8, self.recordButton.frame.size.height)];
     }
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notificationDidRecived:) name:kSTOP_PLAYING object:nil];
 }
@@ -57,6 +58,7 @@
     [self setVoluemView:nil];
     [self setTempView:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [self setRecordButton:nil];
     [super viewDidUnload];
 }
 
@@ -64,18 +66,11 @@
 
 - (IBAction)startRecording:(id)sender {
     if (isRecoding) {
-        [conn cancel];
-        [self showSaveFileDialog:@"Save file with name"];
+        [self stopRecording];
     }
     else
     {
-        NSURL * url = [NSURL URLWithString:currentPlayingURL];
-        NSURLRequest * request = [[NSURLRequest alloc] initWithURL:url];
-        conn = [[NSURLConnection alloc] initWithRequest:request delegate:self];
-        if(conn)
-        {
-            streamData = [[NSMutableData alloc] init];
-        }
+        [self startRecording];
     }
     
     isRecoding = !isRecoding;
@@ -117,8 +112,8 @@
     }];
 }
 
-#pragma mark - Player Events
 
+#pragma mark - Playing Events
 -(void) stopPlaying
 {
     [audioPlayer pause];
@@ -136,7 +131,26 @@
     [self startBackgroundService];
     [self startTimer];
 }
+#pragma mark - Recording Events
+-(void) startRecording
+{
+    NSURL * url = [NSURL URLWithString:currentPlayingURL];
+    NSURLRequest * request = [[NSURLRequest alloc] initWithURL:url];
+    conn = [[NSURLConnection alloc] initWithRequest:request delegate:self];
+    if(conn)
+    {
+        streamData = [[NSMutableData alloc] init];
+    }
+    [self.recordButton setImage:[UIImage imageNamed:@"Stop.png"] forState:UIControlStateNormal];
+}
 
+-(void) stopRecording
+{
+    [conn cancel];
+    [self showSaveFileDialog:@"Save file with name"];
+    [self.recordButton setImage:[UIImage imageNamed:@"Play.png"] forState:UIControlStateNormal];
+}
+#pragma mark - Player Events
 -(void) addDefaultStreamingURL
 {
     NSUserDefaults * defaults = [NSUserDefaults standardUserDefaults];
@@ -152,7 +166,7 @@
 {
     self.tempView.backgroundColor = [UIColor colorWithWhite:1 alpha:0];
     MPVolumeView *volumeView = [[MPVolumeView alloc] initWithFrame:CGRectMake(0, 0, self.tempView.frame.size.width, self.tempView.frame.size.height)];
-    [self.tempView addSubview:volumeView];;
+    [self.tempView addSubview:volumeView];
 	
 }
 
@@ -160,13 +174,6 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
-}
-
-- (BOOL) isConnected
-{
-    Reachability *reachability = [Reachability reachabilityForInternetConnection];
-    NetworkStatus networkStatus = [reachability currentReachabilityStatus];
-    return !(networkStatus == NotReachable);
 }
 
 -(void)sliderChanged:(id)sender
@@ -199,6 +206,33 @@
     [item setAudioMix:audioMix];
 }
 
+-(void) changeStramingURL
+{
+    [audioPlayer pause];
+    AVPlayerItem * newItem = [self createPlayerItemWithURL:[NSURL URLWithString:secondURL]];
+    currentItem = newItem;
+    [audioPlayer replaceCurrentItemWithPlayerItem:newItem];
+    [audioPlayer play];
+    NSLog(@"Second URL: %@", secondURL);
+    /*NSUserDefaults * defaults = [NSUserDefaults standardUserDefaults];
+     NSString * newURL = [defaults objectForKey:@"streamURL"];
+     if(streamingURL != nil && ![streamingURL isEqualToString:newURL])
+     {
+     streamingURL = newURL;
+     AVPlayerItem * newItem = [[AVPlayerItem alloc] initWithURL:[NSURL URLWithString:streamingURL]];
+     [audioPlayer replaceCurrentItemWithPlayerItem:newItem];
+     }*/
+}
+
+#pragma mark - Network Event
+- (BOOL) isConnected
+{
+    Reachability *reachability = [Reachability reachabilityForInternetConnection];
+    NetworkStatus networkStatus = [reachability currentReachabilityStatus];
+    return !(networkStatus == NotReachable);
+}
+
+#pragma markt - Timer Events
 -(void) startTimer
 {
     timer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(timerTick) userInfo:nil repeats:YES];
@@ -241,7 +275,7 @@
     //NSLog(@"Time Elapsed: %d", timeElasped);
     //NSLog(@"Playback time: %lld", [audioPlayer currentTime].value/[audioPlayer currentTime].timescale);
 }
-
+#pragma markt - Activity Indicator
 -(void) createActivityIndicator
 {
 //    NSArray * nibsArray = [[NSBundle mainBundle] loadNibNamed:@"Loader" owner:nil options:nil];
@@ -259,26 +293,7 @@
     [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
 }
 
-
-
--(void) changeStramingURL
-{
-    [audioPlayer pause];
-    AVPlayerItem * newItem = [self createPlayerItemWithURL:[NSURL URLWithString:secondURL]];
-    currentItem = newItem;
-    [audioPlayer replaceCurrentItemWithPlayerItem:newItem];
-    [audioPlayer play];
-    NSLog(@"Second URL: %@", secondURL);
-    /*NSUserDefaults * defaults = [NSUserDefaults standardUserDefaults];
-    NSString * newURL = [defaults objectForKey:@"streamURL"];
-    if(streamingURL != nil && ![streamingURL isEqualToString:newURL])
-    {
-        streamingURL = newURL;
-        AVPlayerItem * newItem = [[AVPlayerItem alloc] initWithURL:[NSURL URLWithString:streamingURL]];
-        [audioPlayer replaceCurrentItemWithPlayerItem:newItem];
-    }*/
-}
-
+#pragma mark - Background Service
 -(void) startBackgroundService
 {
     if ([[UIDevice currentDevice] respondsToSelector:@selector(isMultitaskingSupported)]) {
@@ -297,7 +312,7 @@
     }
 
 }
-
+#pragma mark - Create Player and Player Items
 -(void) createAutioPlayer
 {
     if(!audioPlayer)
@@ -333,6 +348,7 @@
     return playerItem;
 }
 
+#pragma mark - File Handling Events
 
 -(void) showSaveFileDialog:(NSString*) msg
 {

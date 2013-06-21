@@ -24,6 +24,7 @@
 		882214C71771E3CD004CA86C /* SBJsonParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 882214B81771E3CD004CA86C /* SBJsonParser.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		882214C81771E3CD004CA86C /* SBJsonWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 882214BA1771E3CD004CA86C /* SBJsonWriter.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		882214CD1771E895004CA86C /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 882214CC1771E895004CA86C /* MBProgressHUD.m */; };
+		885C970D17747ABF007C130B /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 885C970C17747ABF007C130B /* Social.framework */; };
 		88A2D73217704DE50058E52E /* OptionsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 88A2D73017704DE50058E52E /* OptionsViewController.m */; };
 		88A2D73317704DE50058E52E /* OptionsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 88A2D73117704DE50058E52E /* OptionsViewController.xib */; };
 		88A2D73817707AB70058E52E /* RecordedTracksViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 88A2D73617707AB60058E52E /* RecordedTracksViewController.m */; };
@@ -102,6 +103,7 @@
 		882214BA1771E3CD004CA86C /* SBJsonWriter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonWriter.m; sourceTree = "<group>"; };
 		882214CB1771E895004CA86C /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBProgressHUD.h; sourceTree = "<group>"; };
 		882214CC1771E895004CA86C /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBProgressHUD.m; sourceTree = "<group>"; };
+		885C970C17747ABF007C130B /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
 		88A2D72F17704DE50058E52E /* OptionsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OptionsViewController.h; sourceTree = "<group>"; };
 		88A2D73017704DE50058E52E /* OptionsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OptionsViewController.m; sourceTree = "<group>"; };
 		88A2D73117704DE50058E52E /* OptionsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OptionsViewController.xib; sourceTree = "<group>"; };
@@ -165,6 +167,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				885C970D17747ABF007C130B /* Social.framework in Frameworks */,
 				8822149A1771AA8D004CA86C /* Twitter.framework in Frameworks */,
 				882214971771AA84004CA86C /* Accounts.framework in Frameworks */,
 				F89B6DAE16DB42BC00B88241 /* SystemConfiguration.framework in Frameworks */,
@@ -290,8 +293,6 @@
 		F899D31716CA40280058913E = {
 			isa = PBXGroup;
 			children = (
-				882214991771AA8D004CA86C /* Twitter.framework */,
-				882214961771AA84004CA86C /* Accounts.framework */,
 				88AD5937176EFEC800E95A9F /* Source */,
 				F899D32C16CA40280058913E /* FmTestApp */,
 				F899D32516CA40280058913E /* Frameworks */,
@@ -310,6 +311,9 @@
 		F899D32516CA40280058913E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				885C970C17747ABF007C130B /* Social.framework */,
+				882214991771AA8D004CA86C /* Twitter.framework */,
+				882214961771AA84004CA86C /* Accounts.framework */,
 				F89B6DAD16DB42BC00B88241 /* SystemConfiguration.framework */,
 				F899D37216CA655A0058913E /* CoreMedia.framework */,
 				F899D36F16CA62530058913E /* CoreFoundation.framework */,

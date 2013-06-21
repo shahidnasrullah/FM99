@@ -2,19 +2,4 @@
 <Bucket
    type = "1"
    version = "1.0">
-   <FileBreakpoints>
-      <FileBreakpoint
-         shouldBeEnabled = "Yes"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         filePath = "ViewController.m"
-         timestampString = "393341457.196832"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "331"
-         endingLineNumber = "331"
-         landmarkName = "-createPlayerItemWithURL:"
-         landmarkType = "5">
-      </FileBreakpoint>
-   </FileBreakpoints>
 </Bucket>

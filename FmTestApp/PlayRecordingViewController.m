@@ -7,6 +7,7 @@
 //
 
 #import "PlayRecordingViewController.h"
+#import <MediaPlayer/MediaPlayer.h>
 
 @interface PlayRecordingViewController ()
 
@@ -26,8 +27,13 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.title = @"Play";
+    [self.mFileName setText:self.filePath];
+    [self.lblCurrentTime setText:@"00H:00M:00S"];
     app = (AppDelegate*) [UIApplication sharedApplication].delegate;
     [self createPlayer];
+    [self addVolumeView];
+    [self setProgressSlider];
 }
 
 - (void)didReceiveMemoryWarning
@@ -44,47 +50,85 @@
     audioFile = [[AVAudioPlayer alloc] initWithContentsOfURL:url error:NULL];
     audioFile.delegate = self;
     totalTime = audioFile.duration;
-    [self.lblTotalTime setText:[NSString stringWithFormat:@"%f",totalTime]];
+    [self.lblTotalTime setText:[self foramatTime:totalTime]];
+}
+
+-(NSString*) foramatTime:(double) seconds
+{
+    int hours = seconds / 3600;
+    seconds = fmod(seconds, 3600);
+    int mints = seconds / 60;
+    seconds = fmod(seconds, 60);
+    NSString * s = [NSString stringWithFormat:@"%2.0dH:%2.0dM:%2.0fS", hours, mints,seconds];
+    return s;
+}
+
+-(void) setProgressSlider
+{
+    [self.timeLineSlider setMinimumValue:0];
+    [self.timeLineSlider setMaximumValue:audioFile.duration];
 }
 
 
-
-
 - (IBAction)playRecording:(id)sender {
-    UIButton * btn = (UIButton*) sender;
     if (isPlaying) {
-        [audioFile stop];
-        [btn setTitle:@"Play" forState:UIControlStateNormal];
+        [self pause];
     }
     else
     {
-        [audioFile play];
-        [[NSNotificationCenter defaultCenter] postNotificationName:kSTOP_PLAYING object:nil];
-        [btn setTitle:@"Stop" forState:UIControlStateNormal];
-        timer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(timerTick) userInfo:nil repeats:YES];
+        [self play];
     }
     isPlaying = !isPlaying;
+}
+
+-(void) play
+{
+    [audioFile play];
+    [[NSNotificationCenter defaultCenter] postNotificationName:kSTOP_PLAYING object:nil];
+    //[_btn setTitle:@"Stop" forState:UIControlStateNormal];
+    timer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(timerTick) userInfo:nil repeats:YES];
+    [_btn setImage:[UIImage imageNamed:@"Stop.png"] forState:UIControlStateNormal];
+}
+
+-(void)pause
+{
+    [audioFile stop];
+    //[timer invalidate];
+    [_btn setImage:[UIImage imageNamed:@"Play.png"] forState:UIControlStateNormal];
 }
 
 -(void) timerTick
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self.lblCurrentTime setText:[NSString stringWithFormat:@"%f",audioFile.currentTime]];
+        
+        [self.lblCurrentTime setText:[self foramatTime:audioFile.currentTime]];
+        [self.timeLineSlider setValue:[audioFile currentTime]];
     });
 }
 
+-(void) addVolumeView
+{
+    self.tempView.backgroundColor = [UIColor colorWithWhite:1 alpha:0];
+    MPVolumeView *volumeView = [[MPVolumeView alloc] initWithFrame:CGRectMake(0, 0, self.tempView.frame.size.width, self.tempView.frame.size.height)];
+    [self.tempView addSubview:volumeView];
+	
+}
+
 - (void)viewDidUnload {
+    [timer invalidate];
     [self setBtn:nil];
     [self setLblTotalTime:nil];
     [self setLblCurrentTime:nil];
+    [self setTempView:nil];
+    [self setTimeLineSlider:nil];
+    [self setMFileName:nil];
     [super viewDidUnload];
 }
 
 #pragma mark - AVAudioPlayerDelegate
 -(void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag
 {
-    [audioFile stop];
-    [_btn setTitle:@"Play" forState:UIControlStateNormal];
+    [self pause];
 }
 
 -(void)audioPlayerDecodeErrorDidOccur:(AVAudioPlayer *)player error:(NSError *)error
